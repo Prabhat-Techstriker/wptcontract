@@ -1,0 +1,52 @@
+@extends('layouts.admin')
+@section('content')
+<div class="card">
+    <div class="card-header">
+        Create Contract
+        <div class="pull-right">
+            <a class="btn btn-primary" href="{{url('contracts')}}"> Back</a>
+        </div>
+    </div>
+
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <strong>Whoops!</strong> There were some problems with your input.<br><br>
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+    <div class="card-body">
+        <form action="{{ route("admin.contracts.store") }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <!-- {{ print_r($contacts) }} -->
+            <div class="form-group {{ $errors->has('subject') ? 'has-error' : '' }}">
+                <label for="subject">Subject*</label>
+                <input type="text" id="subject" name="subject" class="form-control" placeholder="Subject" required>
+            </div>
+            <div class="form-group {{ $errors->has('message_body') ? 'has-error' : '' }}">
+                <label for="message">Message*</label>
+                <textarea id="message_body" name="message_body" class="form-control" placeholder="Message" required></textarea>
+            </div>
+            <div class="form-group" {{ $errors->has('file') ? 'has-error' : '' }}>
+                <label for="file">Upload Contract</label>
+                <input type="file" name="file" id="file" class="form-control" required>
+            </div>
+            <div class="form-group">
+                 <label for="file">Send To</label>
+                <select class="form-control" name="contract_id" required>
+                    <option value="">Please Selcet Contact</option>
+                    @foreach($contacts as $list)
+                    <option value="{{ $list->id }}">{{ $list->email}}</option>
+                    @endforeach
+                </select>
+            </div>
+            <button type="submit" class="btn btn-danger">Submit</button>
+                
+            </div>
+        </form>
+    </div>
+</div>
+@endsection
